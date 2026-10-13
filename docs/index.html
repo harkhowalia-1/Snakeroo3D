@@ -1,13 +1,37 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snakeroo 3D</title><link rel="icon" href="icon.png">
-<style>:root{--bg:#0f2614;--card:#173a1f;--fg:#f2f7ee;--mut:#b7cdb9;--ac:#3ddc84;--red:#e8392f}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#2a5f31,var(--bg) 60%);color:var(--fg);font:17px/1.55 system-ui,sans-serif}
-.w{max-width:960px;margin:auto;padding:56px 16px;text-align:center}.hero img{width:180px;border-radius:40px;box-shadow:0 20px 60px #000a;animation:b 3s ease-in-out infinite}@keyframes b{50%{transform:translateY(-10px) rotate(-2deg)}}
-h1{font-size:clamp(40px,8vw,72px);margin:20px 0 0;background:linear-gradient(#ffe14d,#3ddc84);-webkit-background-clip:text;color:transparent}.tag{color:var(--mut);font-size:20px}
-.btn{display:inline-block;margin:8px;padding:15px 28px;border-radius:16px;background:var(--ac);color:#08210f;font-weight:800;text-decoration:none;transition:.2s}.btn.alt{background:var(--red);color:#fff}.btn:hover{transform:translateY(-3px)}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:48px;text-align:left}.c{background:var(--card);border:1px solid #ffffff14;border-radius:18px;padding:20px}.c b{display:block;font-size:18px;margin-bottom:4px}.c span{color:var(--mut);font-size:15px}
-small{display:block;color:var(--mut);margin-top:40px}a{color:var(--ac)}</style></head><body><div class="w">
-<div class="hero"><img src="icon.png" alt="Snakeroo 3D icon"><h1>Snakeroo 3D</h1><p class="tag">The classic snake game, reborn in cheerful 3D for Mac, iPhone and iPad.</p>
-<a class="btn" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.dmg">⬇ Download for Mac</a><a class="btn alt" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.ipa">📱 iPhone / iPad</a></div>
-<div class="g"><div class="c"><b>🐍 Smooth 3D snakes</b><span>Spotted skins in three colours, with blinking cartoon eyes.</span></div><div class="c"><b>⚡ Six power-ups</b><span>Snail, Flash, Diet, Twister, Arrow and Serum change every run.</span></div>
-<div class="c"><b>🎥 Three cameras</b><span>Classic overhead, chase cam or first person.</span></div><div class="c"><b>🚪 Adventure mode</b><span>Grow, unlock the gate, beat the clock.</span></div>
-<div class="c"><b>🤖 CPU rival</b><span>Race an AI snake for every apple.</span></div><div class="c"><b>🎵 Chiptune sound</b><span>Original retro music and buzzer effects.</span></div></div>
-<small>The Mac app is unsigned: right-click → Open the first time. The IPA must be signed (AltStore / Sideloadly) before installing. · <a href="https://github.com/harkhowalia-1/Snakeroo3D">Source on GitHub</a></small></div></body></html>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+<style>:root{--fg:#fff}*{box-sizing:border-box;margin:0}html,body{height:100%;overflow:hidden;background:#3f8f2e;font-family:'Lilita One',system-ui,sans-serif;color:var(--fg);cursor:none}
+canvas{position:fixed;inset:0}.ui{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none;text-align:center;padding:16px}
+h1{font-size:clamp(48px,11vw,120px);letter-spacing:2px;color:#ffd22e;-webkit-text-stroke:4px #6b1d0f;text-shadow:0 8px 0 #6b1d0f,0 14px 30px #0006;transform:rotate(-3deg)}
+.sub{font-size:clamp(18px,3.5vw,28px);text-shadow:0 3px 0 #1d4d16}.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;pointer-events:auto}
+a.b{cursor:pointer;font-size:22px;padding:14px 26px;border-radius:18px;text-decoration:none;color:#fff;background:#e8392f;border-bottom:6px solid #8e1b14;transition:transform .1s}a.b.g{background:#2fb44a;border-color:#166b28}a.b:active{transform:translateY(4px);border-bottom-width:2px}
+.hud{position:fixed;top:16px;left:50%;transform:translateX(-50%);font-size:26px;background:#0004;padding:6px 18px;border-radius:14px;text-shadow:0 2px 0 #0006}
+.hint{position:fixed;bottom:14px;width:100%;text-align:center;font-size:16px;opacity:.85}.hint a{color:#fff}</style></head><body>
+<canvas id="c"></canvas><div class="hud">🍎 <span id="s">0</span> · best <span id="h">0</span></div>
+<div class="ui"><h1>SNAKEROO 3D</h1><p class="sub">Born for iPhone, iPad &amp; Mac</p>
+<div class="row"><a class="b g" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.dmg">▶ Mac</a><a class="b" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.ipa">▶ iPhone / iPad</a></div></div>
+<p class="hint">Move your mouse or finger — the snake follows. Eat apples, dodge your own tail! · <a href="https://github.com/harkhowalia-1/Snakeroo3D">GitHub</a></p>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');let W,H,D;function rs(){D=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();onresize=rs;
+let m={x:W/2,y:H*0.75},s=[],len=40,ap=[],sc=0,best=+(localStorage.sr||0),shake=0,parts=[],blink=0;document.getElementById('h').textContent=best;
+for(let i=0;i<len;i++)s.push({x:W/2,y:H*0.75+i*4});
+const mv=e=>{const t=e.touches?e.touches[0]:e;m.x=t.clientX;m.y=t.clientY};addEventListener('mousemove',mv);addEventListener('touchmove',mv,{passive:true});addEventListener('touchstart',mv,{passive:true});
+function apple(){ap.push({x:60+Math.random()*(W-120),y:80+Math.random()*(H-160),t:Math.random()*6})}for(let i=0;i<4;i++)apple();
+const tufts=[...Array(90)].map(()=>({x:Math.random(),y:Math.random(),r:6+Math.random()*10}));
+function grass(){x.fillStyle='#3f8f2e';x.fillRect(0,0,W,H);for(let i=0;i<W;i+=60)for(let j=0;j<H;j+=60)if((i/60+j/60)%2<1){x.fillStyle='#46992f';x.fillRect(i,j,60,60)}
+x.fillStyle='#2f7a22';for(const t of tufts){const a=t.x*W,b=t.y*H;x.beginPath();x.moveTo(a,b);x.lineTo(a+t.r/2,b-t.r*1.6);x.lineTo(a+t.r,b);x.fill()}}
+function loop(){requestAnimationFrame(loop);const h=s[0],dx=m.x-h.x,dy=m.y-h.y,d=Math.hypot(dx,dy),sp=Math.min(d*0.12,9);
+if(d>1){h.x+=dx/d*sp;h.y+=dy/d*sp}for(let i=1;i<s.length;i++){const a=s[i-1],b=s[i],ex=b.x-a.x,ey=b.y-a.y,l=Math.hypot(ex,ey)||1;b.x=a.x+ex/l*4;b.y=a.y+ey/l*4}
+for(let i=ap.length-1;i>=0;i--){const p=ap[i];if(Math.hypot(p.x-h.x,p.y-h.y)<30){ap.splice(i,1);apple();sc++;for(let k=0;k<6;k++)s.push({...s[s.length-1]});shake=8;
+for(let k=0;k<18;k++)parts.push({x:p.x,y:p.y,vx:(Math.random()-.5)*9,vy:(Math.random()-.5)*9,l:1});document.getElementById('s').textContent=sc;if(sc>best){best=sc;localStorage.sr=best;document.getElementById('h').textContent=best}}}
+if(sp>3)for(let i=30;i<s.length;i+=2)if(Math.hypot(s[i].x-h.x,s[i].y-h.y)<10){s.length=Math.max(40,i);sc=0;document.getElementById('s').textContent=0;shake=14;break}
+x.save();if(shake>0){x.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.85}grass();
+for(const p of ap){p.t+=.05;const y=p.y+Math.sin(p.t)*4;x.fillStyle='#0003';x.beginPath();x.ellipse(p.x,p.y+18,14,5,0,0,7);x.fill();
+const g=x.createRadialGradient(p.x-6,y-6,2,p.x,y,18);g.addColorStop(0,'#ff8a7a');g.addColorStop(1,'#c4161c');x.fillStyle=g;x.beginPath();x.arc(p.x,y,16,0,7);x.fill();x.fillStyle='#2b8a1e';x.beginPath();x.ellipse(p.x+6,y-17,7,3.5,-.5,0,7);x.fill()}
+for(let i=s.length-1;i>=0;i--){const q=s[i],r=22*(1-i/s.length*.75)+4;x.fillStyle=i%14<6&&i>4?'#ffd22e':(i%2?'#d9261c':'#e8392f');x.beginPath();x.arc(q.x,q.y,r,0,7);x.fill()}
+const a=Math.atan2(dy,dx);x.translate(h.x,h.y);x.rotate(a);const hg=x.createRadialGradient(-6,-8,4,0,0,32);hg.addColorStop(0,'#ff6a5c');hg.addColorStop(1,'#b81c14');x.fillStyle=hg;x.beginPath();x.ellipse(4,0,34,28,0,0,7);x.fill();
+if(Math.random()<.004)blink=8;for(const e of[-13,13]){x.fillStyle='#fff';x.beginPath();x.ellipse(12,e,11,blink>0?2:12,0,0,7);x.fill();if(!blink){x.fillStyle='#111';x.beginPath();x.arc(16,e,5.5,0,7);x.fill()}}blink=Math.max(0,blink-1);
+if(Date.now()%1400<220){x.strokeStyle='#ff2a5a';x.lineWidth=3;x.beginPath();x.moveTo(36,0);x.lineTo(52,0);x.lineTo(58,-5);x.moveTo(52,0);x.lineTo(58,5);x.stroke()}x.restore();
+for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx;p.y+=p.vy;p.l-=.03;if(p.l<=0){parts.splice(i,1);continue}x.fillStyle='rgba(255,210,46,'+p.l+')';x.beginPath();x.arc(p.x,p.y,4*p.l+1,0,7);x.fill()}}
+loop();
+</script></body></html>
