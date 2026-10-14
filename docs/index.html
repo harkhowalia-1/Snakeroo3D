@@ -1,40 +1,193 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snakeroo 3D</title><link rel="icon" href="icon.png">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
-<style>:root{--fg:#fff}*{box-sizing:border-box;margin:0}html,body{height:100%;overflow:hidden;background:#3f8f2e;font-family:Nunito,ui-rounded,system-ui,sans-serif;color:var(--fg);cursor:crosshair}
-canvas{position:fixed;inset:0}.ui{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none;text-align:center;padding:16px}
-h1{font-weight:900;font-size:clamp(44px,10vw,96px);line-height:1;background:linear-gradient(#ffe14d,#34c759);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 6px 10px #0008)}
-.d3{font-weight:900;font-size:clamp(20px,4vw,30px);letter-spacing:4px;opacity:.9;margin-top:-6px}
-.panel{pointer-events:auto;cursor:default;background:#1d3b22a6;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid #ffffff26;border-radius:28px;padding:26px;box-shadow:0 20px 50px #0007;display:flex;flex-direction:column;gap:12px;align-items:center;max-width:440px;width:100%}
-.panel img{width:96px;border-radius:24px;box-shadow:0 8px 24px #0006}.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.chips span{background:#ffffff14;border-radius:999px;padding:5px 12px;font-size:14px}
-.sub{font-size:clamp(18px,3.5vw,28px);text-shadow:0 3px 0 #1d4d16}.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;pointer-events:auto}
-a.b{cursor:pointer;font-weight:900;font-size:18px;padding:14px 22px;border-radius:16px;text-decoration:none;color:#0b1f10;background:linear-gradient(90deg,#34c759,#00c7be);border-bottom:5px solid #0a7a55;transition:transform .1s;flex:1;min-width:160px}a.b.g{}a.b:not(.g){background:#ffffff1f;color:#fff;border-color:#ffffff2a}a.b:active{transform:translateY(4px);border-bottom-width:2px}
-.hud{position:fixed;top:16px;left:50%;transform:translateX(-50%);font-size:26px;background:#0004;padding:6px 18px;border-radius:14px;text-shadow:0 2px 0 #0006}
-.hint{position:fixed;bottom:14px;width:100%;text-align:center;font-size:16px;opacity:.85}.hint a{color:#fff}</style></head><body>
-<canvas id="c"></canvas><div class="hud">🍎 <span id="s">0</span> · best <span id="h">0</span></div>
-<div class="ui"><h1>SNAKEROO</h1><div class="d3">3D</div><div class="panel"><img src="icon.png" alt="Snakeroo 3D icon"><p class="sub">Born for iPhone, iPad &amp; Mac</p>
-<div class="chips"><span>🐍 3D snakes</span><span>⚡ 6 power-ups</span><span>🎥 3 cameras</span><span>🚪 Adventure</span><span>🤖 CPU rival</span></div><div class="row" style="width:100%"><a class="b g" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.dmg">▶ Mac</a><a class="b" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.ipa">▶ iPhone / iPad</a></div></div></div>
-<p class="hint">Move your mouse or finger — the snake follows. Eat apples, dodge your own tail! · <a href="https://github.com/harkhowalia-1/Snakeroo3D">GitHub</a></p>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snakeroo 3D</title>
+<meta name="description" content="Snakeroo 3D — a cheerful 3D snake game for iPhone, iPad and Mac.">
+<link rel="icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c1a10;--bg2:#12261a;--ink:#f4f8f1;--mut:#9fb6a3;--red:#ef3b2d;--yel:#ffcf33;--grn:#38c96b;--line:#ffffff14}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px Fredoka,sans-serif;text-decoration:none}
+.brand img{width:36px;height:36px;border-radius:10px}
+nav .gh{font-size:14px;color:var(--mut);text-decoration:none;border:1px solid var(--line);padding:8px 14px;border-radius:999px}
+nav .gh:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:40px 0 80px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--yel);background:#ffcf3314;padding:6px 12px;border-radius:999px}
+h1{font:700 clamp(52px,8vw,96px)/.95 Fredoka,sans-serif;margin:18px 0 18px;letter-spacing:-.01em}
+h1 span{color:var(--red)}
+.lede{font-size:19px;color:var(--mut);max-width:30ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 17px Fredoka,sans-serif;padding:14px 22px;border-radius:14px;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--red);color:#fff;box-shadow:0 10px 30px #ef3b2d55}
+.btn.s{background:#ffffff0d;border:1px solid var(--line)}
+.btn svg{width:20px;height:20px}
+.note{font-size:13px;color:var(--mut);margin-top:14px}
+/* Arena */
+.stage{position:relative}
+.stage::before{content:"";position:absolute;inset:-40px;background:radial-gradient(circle at 50% 45%,#38c96b33,transparent 65%);z-index:-1}
+.board{background:linear-gradient(#2c5f2e,#244f27);border-radius:28px;padding:18px;box-shadow:0 30px 80px #0009,inset 0 0 0 1px #ffffff12}
+canvas{display:block;width:100%;aspect-ratio:1;border-radius:14px;touch-action:none}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font:600 14px Inter,sans-serif;color:#cfe3d2}
+.bar b{font:700 22px Fredoka,sans-serif;color:var(--yel)}
+.pill{font-size:12px;padding:5px 10px;border-radius:999px;background:#0003}
+.pill.live{background:var(--red);color:#fff}
+/* Platforms + steps */
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.strip div{background:var(--bg2);padding:26px}
+.strip h3{font:700 22px Fredoka,sans-serif;margin-bottom:4px}
+.strip p{color:var(--mut);font-size:15px}
+.how{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;padding:70px 0 40px;color:var(--mut)}
+.how span{display:flex;align-items:center;gap:10px}
+kbd{font:600 13px Inter,sans-serif;color:var(--ink);background:#ffffff12;border:1px solid var(--line);border-bottom-width:3px;border-radius:7px;padding:3px 8px}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.hero{grid-template-columns:1fr;gap:36px;padding-top:10px}.strip{grid-template-columns:1fr}.lede{max-width:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#"><img src="icon.png" alt="">Snakeroo 3D</a>
+    <a class="gh" href="https://github.com/harkhowalia-1/Snakeroo3D">View on GitHub</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">● Free · iPhone · iPad · Mac</span>
+      <h1>Hungry?<br><span>Slither</span> in.</h1>
+      <p class="lede">The classic snake game, rebuilt in bright, bouncy 3D. Eat, grow, power up, and don't bite your own tail.</p>
+      <div class="cta">
+        <a class="btn p" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.dmg">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.8C6.9 7.4 5.5 8.3 4.7 9.7c-1.6 2.8-.4 6.9 1.2 9.1.8 1.1 1.7 2.3 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.7zM14.1 5.8c.6-.8 1.1-1.8 1-2.8-.9 0-2 .6-2.6 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.6-1.3z"/></svg>
+          Download for Mac</a>
+        <a class="btn s" href="https://github.com/harkhowalia-1/Snakeroo3D/releases/latest/download/Snakeroo3D.ipa">iPhone &amp; iPad (.ipa)</a>
+      </div>
+      <p class="note">Mac: right-click → Open the first time. The .ipa needs signing (AltStore / Sideloadly).</p>
+    </div>
+
+    <div class="stage">
+      <div class="board">
+        <canvas id="g" aria-label="Playable snake demo"></canvas>
+        <div class="bar"><span>SCORE <b id="sc">000</b></span><span id="st" class="pill">DEMO · press an arrow or swipe to play</span><span>BEST <b id="hi">000</b></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="strip">
+    <div><h3>📱 iPhone</h3><p>Swipe to steer, hold ⚡ to dash. Made for one hand.</p></div>
+    <div><h3>🖥 iPad</h3><p>Big-screen arena with touch or a keyboard.</p></div>
+    <div><h3>💻 Mac</h3><p>Arrow keys, 120 fps, and a window you can resize.</p></div>
+  </section>
+
+  <div class="how">
+    <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> steer</span>
+    <span><kbd>Shift</kbd> dash</span>
+    <span><kbd>Space</kbd> pause</span>
+    <span>🍎 eat · 🪨 avoid · ⚡ power up</span>
+  </div>
+
+  <footer>
+    <span>© 2026 harkhowalia-1 · Snakeroo 3D</span>
+    <a href="https://github.com/harkhowalia-1/Snakeroo3D">Source code</a>
+  </footer>
+</div>
+
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d');let W,H,D;function rs(){D=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0)}rs();onresize=rs;
-let m={x:W/2,y:H*0.75},s=[],len=40,ap=[],sc=0,best=+(localStorage.sr||0),shake=0,parts=[],blink=0;document.getElementById('h').textContent=best;
-for(let i=0;i<len;i++)s.push({x:W/2,y:H*0.75+i*4});
-const mv=e=>{const t=e.touches?e.touches[0]:e;m.x=t.clientX;m.y=t.clientY};addEventListener('mousemove',mv);addEventListener('touchmove',mv,{passive:true});addEventListener('touchstart',mv,{passive:true});
-function apple(){ap.push({x:60+Math.random()*(W-120),y:80+Math.random()*(H-160),t:Math.random()*6})}for(let i=0;i<4;i++)apple();
-const tufts=[...Array(90)].map(()=>({x:Math.random(),y:Math.random(),r:6+Math.random()*10}));
-function grass(){x.fillStyle='#4f9a33';x.fillRect(0,0,W,H);for(let i=0;i<W;i+=60)for(let j=0;j<H;j+=60)if((i/60+j/60)%2<1){x.fillStyle='#56a238';x.fillRect(i,j,60,60)};x.fillStyle='#8a8580';for(let i=0;i<W;i+=30){x.fillRect(i+1,1,28,14);x.fillRect(i+1,H-15,28,14)}for(let j=0;j<H;j+=30){x.fillRect(1,j+1,14,28);x.fillRect(W-15,j+1,14,28)}
-x.fillStyle='#2f7a22';for(const t of tufts){const a=t.x*W,b=t.y*H;x.beginPath();x.moveTo(a,b);x.lineTo(a+t.r/2,b-t.r*1.6);x.lineTo(a+t.r,b);x.fill()}}
-function loop(){requestAnimationFrame(loop);const h=s[0],dx=m.x-h.x,dy=m.y-h.y,d=Math.hypot(dx,dy),sp=Math.min(d*0.12,9);
-if(d>1){h.x+=dx/d*sp;h.y+=dy/d*sp}for(let i=1;i<s.length;i++){const a=s[i-1],b=s[i],ex=b.x-a.x,ey=b.y-a.y,l=Math.hypot(ex,ey)||1;b.x=a.x+ex/l*4;b.y=a.y+ey/l*4}
-for(let i=ap.length-1;i>=0;i--){const p=ap[i];if(Math.hypot(p.x-h.x,p.y-h.y)<30){ap.splice(i,1);apple();sc++;for(let k=0;k<6;k++)s.push({...s[s.length-1]});shake=8;
-for(let k=0;k<18;k++)parts.push({x:p.x,y:p.y,vx:(Math.random()-.5)*9,vy:(Math.random()-.5)*9,l:1});document.getElementById('s').textContent=sc;if(sc>best){best=sc;localStorage.sr=best;document.getElementById('h').textContent=best}}}
-if(sp>3)for(let i=30;i<s.length;i+=2)if(Math.hypot(s[i].x-h.x,s[i].y-h.y)<10){s.length=Math.max(40,i);sc=0;document.getElementById('s').textContent=0;shake=14;break}
-x.save();if(shake>0){x.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.85}grass();
-for(const p of ap){p.t+=.05;const y=p.y+Math.sin(p.t)*4;x.fillStyle='#0003';x.beginPath();x.ellipse(p.x,p.y+18,14,5,0,0,7);x.fill();
-const g=x.createRadialGradient(p.x-6,y-6,2,p.x,y,18);g.addColorStop(0,'#ff8a7a');g.addColorStop(1,'#c4161c');x.fillStyle=g;x.beginPath();x.arc(p.x,y,16,0,7);x.fill();x.fillStyle='#2b8a1e';x.beginPath();x.ellipse(p.x+6,y-17,7,3.5,-.5,0,7);x.fill()}
-for(let i=s.length-1;i>=0;i--){const q=s[i],r=22*(1-i/s.length*.75)+4;x.fillStyle=i%14<6&&i>4?'#ffd22e':(i%2?'#d9261c':'#e8392f');x.beginPath();x.arc(q.x,q.y,r,0,7);x.fill()}
-const a=Math.atan2(dy,dx);x.translate(h.x,h.y);x.rotate(a);const hg=x.createRadialGradient(-6,-8,4,0,0,32);hg.addColorStop(0,'#ff6a5c');hg.addColorStop(1,'#b81c14');x.fillStyle=hg;x.beginPath();x.ellipse(4,0,34,28,0,0,7);x.fill();
-if(Math.random()<.004)blink=8;for(const e of[-13,13]){x.fillStyle='#fff';x.beginPath();x.ellipse(12,e,11,blink>0?2:12,0,0,7);x.fill();if(!blink){x.fillStyle='#111';x.beginPath();x.arc(16,e,5.5,0,7);x.fill()}}blink=Math.max(0,blink-1);
-if(Date.now()%1400<220){x.strokeStyle='#ff2a5a';x.lineWidth=3;x.beginPath();x.moveTo(36,0);x.lineTo(52,0);x.lineTo(58,-5);x.moveTo(52,0);x.lineTo(58,5);x.stroke()}x.restore();
-for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx;p.y+=p.vy;p.l-=.03;if(p.l<=0){parts.splice(i,1);continue}x.fillStyle='rgba(255,210,46,'+p.l+')';x.beginPath();x.arc(p.x,p.y,4*p.l+1,0,7);x.fill()}}
-loop();
-</script></body></html>
+// Mini arena: 16x16 grid with stone walls. Plays itself until the visitor takes over.
+const cv = document.getElementById('g'), ctx = cv.getContext('2d');
+const N = 16, scEl = document.getElementById('sc'), hiEl = document.getElementById('hi'), stEl = document.getElementById('st');
+let px, snake, dir, nextDir, apple, score, demo = true, tick = 0, eatFx = 0;
+let best = 0; try { best = +localStorage.getItem('snakeroo-best') || 0 } catch (e) {}
+const pad = n => String(n).padStart(3, '0');
+hiEl.textContent = pad(best);
+
+function size() { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.width * d; px = cv.width / N; }
+addEventListener('resize', size); size();
+
+function reset() {
+  snake = [{x: 5, y: 8}, {x: 4, y: 8}, {x: 3, y: 8}]; dir = nextDir = {x: 1, y: 0}; score = 0; place(); scEl.textContent = pad(0);
+}
+const wall = (x, y) => x <= 0 || y <= 0 || x >= N - 1 || y >= N - 1;
+const onSnake = (x, y, from = 0) => snake.slice(from).some(s => s.x === x && s.y === y);
+function place() { do { apple = {x: 1 + (Math.random() * (N - 2) | 0), y: 1 + (Math.random() * (N - 2) | 0)} } while (onSnake(apple.x, apple.y)); }
+
+function ai() { // pick the safe move that gets closest to the apple
+  const h = snake[0], opts = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => !(d.x === -dir.x && d.y === -dir.y));
+  let bestD = dir, bestScore = 1e9;
+  for (const d of opts) { const x = h.x + d.x, y = h.y + d.y; if (wall(x, y) || onSnake(x, y, 0)) continue;
+    const s = Math.abs(x - apple.x) + Math.abs(y - apple.y); if (s < bestScore) { bestScore = s; bestD = d } }
+  return bestD;
+}
+
+function step() {
+  dir = demo ? ai() : nextDir;
+  const h = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+  if (wall(h.x, h.y) || onSnake(h.x, h.y)) { if (!demo) { demo = true; stEl.textContent = 'OUCH · press an arrow to retry'; stEl.className = 'pill'; } reset(); return; }
+  snake.unshift(h);
+  if (h.x === apple.x && h.y === apple.y) { score++; eatFx = 1; place(); scEl.textContent = pad(score);
+    if (!demo && score > best) { best = score; hiEl.textContent = pad(best); try { localStorage.setItem('snakeroo-best', best) } catch (e) {} } }
+  else snake.pop();
+}
+
+function take(d) {
+  if (demo) { demo = false; reset(); stEl.textContent = 'YOU’RE PLAYING'; stEl.className = 'pill live'; }
+  if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+}
+addEventListener('keydown', e => {
+  const m = {ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0}, w:{x:0,y:-1}, s:{x:0,y:1}, a:{x:-1,y:0}, d:{x:1,y:0}}[e.key];
+  if (m) { e.preventDefault(); take(m); }
+});
+let t0;
+cv.addEventListener('touchstart', e => { t0 = e.touches[0] }, {passive: true});
+cv.addEventListener('touchmove', e => { e.preventDefault() }, {passive: false});
+cv.addEventListener('touchend', e => { if (!t0) return; const t = e.changedTouches[0], dx = t.clientX - t0.clientX, dy = t.clientY - t0.clientY;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) > 20) take(Math.abs(dx) > Math.abs(dy) ? {x: Math.sign(dx), y: 0} : {x: 0, y: Math.sign(dy)}); t0 = null; });
+
+function draw(t) {
+  const p = px;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    if (wall(x, y)) { ctx.fillStyle = '#8b8780'; ctx.fillRect(x*p, y*p, p, p); ctx.fillStyle = '#a7a39b'; ctx.fillRect(x*p + p*.1, y*p + p*.1, p*.8, p*.55); continue; }
+    ctx.fillStyle = (x + y) % 2 ? '#5fae3c' : '#69b844'; ctx.fillRect(x*p, y*p, p, p);
+  }
+  // apple
+  const bob = Math.sin(t / 220) * p * .06, ax = (apple.x + .5) * p, ay = (apple.y + .5) * p + bob;
+  ctx.fillStyle = '#0003'; ctx.beginPath(); ctx.ellipse(ax, (apple.y + .85) * p, p*.3, p*.1, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = '#e02a22'; ctx.beginPath(); ctx.arc(ax, ay, p*.36, 0, 7); ctx.fill();
+  ctx.fillStyle = '#ff8a7d'; ctx.beginPath(); ctx.arc(ax - p*.12, ay - p*.12, p*.1, 0, 7); ctx.fill();
+  ctx.fillStyle = '#2c8a22'; ctx.beginPath(); ctx.ellipse(ax + p*.12, ay - p*.38, p*.14, p*.07, -.6, 0, 7); ctx.fill();
+  // snake: tapered round body, yellow spots, cartoon head
+  for (let i = snake.length - 1; i >= 0; i--) {
+    const s = snake[i], r = p * (.46 - .16 * i / Math.max(snake.length, 6)), cx = (s.x + .5) * p, cy = (s.y + .5) * p;
+    ctx.fillStyle = i === 0 ? '#ef3b2d' : '#d8301f'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill();
+    if (i > 0 && i % 3 === 1) { ctx.fillStyle = '#ffcf33'; ctx.beginPath(); ctx.arc(cx, cy, r * .5, 0, 7); ctx.fill(); }
+    if (i < snake.length - 1) { const n = snake[i + 1]; ctx.fillStyle = '#d8301f'; ctx.beginPath();
+      ctx.arc(((s.x + n.x) / 2 + .5) * p, ((s.y + n.y) / 2 + .5) * p, r * .92, 0, 7); ctx.fill(); }
+  }
+  const h = snake[0], hx = (h.x + .5) * p, hy = (h.y + .5) * p, k = 1 + eatFx * .25;
+  for (const side of [-1, 1]) {
+    const ex = hx + dir.x * p*.12 + dir.y * side * p*.2, ey = hy + dir.y * p*.12 - dir.x * side * p*.2;
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex, ey, p*.16*k, 0, 7); ctx.fill();
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(ex + dir.x*p*.05, ey + dir.y*p*.05, p*.08, 0, 7); ctx.fill();
+  }
+  if ((t / 900 | 0) % 3 === 0) { ctx.strokeStyle = '#ff3b6b'; ctx.lineWidth = p*.07; ctx.beginPath();
+    ctx.moveTo(hx + dir.x*p*.45, hy + dir.y*p*.45); ctx.lineTo(hx + dir.x*p*.75, hy + dir.y*p*.75); ctx.stroke(); }
+  eatFx = Math.max(0, eatFx - .06);
+}
+
+reset();
+let last = 0;
+(function loop(t) {
+  requestAnimationFrame(loop);
+  if (t - last > (demo ? 120 : 105)) { last = t; step(); }
+  draw(t);
+})(0);
+</script>
+</body>
+</html>
