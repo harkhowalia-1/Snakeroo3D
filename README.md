@@ -49,3 +49,9 @@ brew install xcodegen
 xcodegen generate
 open Serpent3D.xcodeproj
 ```
+
+## Support
+
+If you enjoy this project, you can support me here:
+
+<a href="https://buymeacoffee.com/harkhowalia"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-orange.png" alt="Buy me a coffee" height="50"></a>
